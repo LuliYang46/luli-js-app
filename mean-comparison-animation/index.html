@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mean Comparison Animation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div>
+        <h1>Four Ways to Make a Square</h1>
+        <p class="subtitle">Start with one rectangle. Each animation reshapes it into a square while preserving a different geometric quantity.</p>
+      </div>
+      <div class="readout" aria-live="polite">
+        <span>a = <strong id="aValue">9.0</strong></span>
+        <span>b = <strong id="bValue">4.0</strong></span>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="Mean comparison workspace">
+      <aside class="controls" aria-label="Controls">
+        <div class="source-block">
+          <h2>Source rectangle</h2>
+          <svg id="sourceSvg" viewBox="0 0 320 230" role="img" aria-labelledby="sourceTitle sourceDesc">
+            <title id="sourceTitle">Draggable source rectangle</title>
+            <desc id="sourceDesc">Drag the lower right corner to set side lengths a and b.</desc>
+            <rect class="source-grid-bg" x="18" y="18" width="284" height="194"></rect>
+            <g id="sourceGrid"></g>
+            <rect id="sourceRect" class="source-rect"></rect>
+            <line id="sourceWidthGuide" class="dimension-guide"></line>
+            <line id="sourceHeightGuide" class="dimension-guide"></line>
+            <text id="sourceWidthLabel" class="source-label">a</text>
+            <text id="sourceHeightLabel" class="source-label">b</text>
+            <g id="sourceHandle" class="drag-handle" tabindex="0" role="button" aria-label="Drag to change a and b">
+              <circle id="sourceHandleHit" class="handle-hit" r="22"></circle>
+              <circle id="sourceHandleRing" class="handle-ring" r="13"></circle>
+              <circle id="sourceHandleDot" class="handle-dot" r="7"></circle>
+            </g>
+          </svg>
+        </div>
+
+        <div class="sliders">
+          <label class="slider-row" for="aSlider">
+            <span>Side a</span>
+            <input id="aSlider" type="range" min="2" max="12" step="0.1" value="9">
+          </label>
+          <label class="slider-row" for="bSlider">
+            <span>Side b</span>
+            <input id="bSlider" type="range" min="2" max="12" step="0.1" value="4">
+          </label>
+          <label class="slider-row progress-row" for="progressSlider">
+            <span>Progress</span>
+            <input id="progressSlider" type="range" min="0" max="1" step="0.001" value="0">
+          </label>
+        </div>
+
+        <div class="button-row">
+          <button id="playBtn" type="button">Play</button>
+          <button id="resetBtn" type="button">Reset</button>
+        </div>
+      </aside>
+
+      <section class="mean-grid" id="meanGrid" aria-label="Mean animations"></section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
