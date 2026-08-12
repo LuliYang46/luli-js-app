@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Finding the Fermat Point</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Shortest total distance</p>
+        <h1>Finding the Fermat Point</h1>
+        <p class="subtitle">Choose a 60° rotation, straighten the three distances, and discover the one point whose total distance to A, B, and C is smallest.</p>
+      </div>
+      <div class="step-badge" id="stepBadge" aria-live="polite">Step 1 of 6</div>
+    </header>
+
+    <section class="workspace" aria-label="Interactive Fermat point lesson">
+      <section class="diagram-card" aria-label="Fermat point construction">
+        <div class="diagram-heading">
+          <div>
+            <h2>Triangle construction</h2>
+            <p>Drag A, B, C, and P. You can also click anywhere inside the triangle to place P.</p>
+          </div>
+          <span class="drag-hint">Drag the colored points</span>
+        </div>
+
+        <svg id="diagram" viewBox="0 0 1200 720" role="img" aria-labelledby="diagramTitle diagramDesc">
+          <title id="diagramTitle">Interactive construction of the Fermat point</title>
+          <desc id="diagramDesc">A draggable triangle and trial point demonstrate the sixty-degree rotation proof for the point with minimum total distance to the three vertices.</desc>
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" class="grid-line" fill="none"></path>
+            </pattern>
+            <filter id="pointShadow" x="-80%" y="-80%" width="260%" height="260%">
+              <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#173047" flood-opacity="0.18"></feDropShadow>
+            </filter>
+            <marker id="lineArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M 0 0 L 9 4.5 L 0 9 z" class="line-arrow"></path>
+            </marker>
+          </defs>
+
+          <rect id="diagramBackground" class="diagram-background" x="-2000" y="-2000" width="5200" height="4700"></rect>
+          <rect id="gridBackground" class="grid-background" x="-2000" y="-2000" width="5200" height="4700"></rect>
+
+          <g id="triangleLayer" aria-hidden="true">
+            <polygon id="triangleFill" class="triangle-fill"></polygon>
+            <path id="triangleOutline" class="triangle-outline"></path>
+          </g>
+
+          <g id="trialLayer" class="visual-layer" aria-hidden="true">
+            <path id="trialPath" class="trial-path"></path>
+            <text id="trialFormula" class="formula-label">PA + PB + PC</text>
+          </g>
+
+          <g id="rotationLayer" class="visual-layer" aria-hidden="true">
+            <path id="rotationSweep" class="rotation-sweep"></path>
+            <polygon id="rotatingTriangle" class="rotating-triangle"></polygon>
+            <path id="rotatingEdges" class="rotating-edges"></path>
+            <path id="angleArc" class="angle-arc" marker-end="url(#lineArrow)"></path>
+            <text id="angleLabel" class="angle-label">60°</text>
+            <circle id="rotatedMovingDot" class="rotated-moving-dot" r="7"></circle>
+            <circle id="rotatedPointDot" class="rotated-point-dot" r="7"></circle>
+            <text id="rotatedMovingLabel" class="point-label prime-label"></text>
+            <text id="rotatedPointLabel" class="point-label prime-label">P′</text>
+          </g>
+
+          <g id="equalityLayer" class="visual-layer" aria-hidden="true">
+            <path id="straightenedTrialPath" class="straightened-trial-path"></path>
+            <g id="equalitySegments"></g>
+            <g id="equalityTicks"></g>
+            <g id="equalityLabels"></g>
+          </g>
+
+          <g id="selectedLineLayer" class="visual-layer" aria-hidden="true">
+            <line id="selectedConstructionLine" class="selected-construction-line"></line>
+            <text id="selectedLineLabel" class="line-label"></text>
+          </g>
+
+          <g id="allLinesLayer" class="visual-layer" aria-hidden="true">
+            <g id="allConstructionLines"></g>
+            <path id="optimalStraightPath" class="optimal-straight-path"></path>
+            <circle id="fermatHalo" class="fermat-halo" r="18"></circle>
+            <circle id="fermatDot" class="fermat-dot" r="7"></circle>
+            <text id="fermatLabel" class="point-label fermat-label">F</text>
+            <g id="fermatAngleMarks"></g>
+          </g>
+
+          <g id="wideAngleLayer" class="visual-layer" aria-hidden="true">
+            <path id="wideAngleArc" class="wide-angle-arc"></path>
+            <text id="wideAngleLabel" class="wide-angle-label"></text>
+            <circle id="vertexFermatHalo" class="fermat-halo" r="20"></circle>
+            <text id="vertexFermatLabel" class="point-label fermat-label"></text>
+          </g>
+
+          <g id="handleLayer">
+            <g class="drag-point vertex-handle" data-point="A" tabindex="0" role="button" aria-label="Vertex A. Use arrow keys to move.">
+              <circle class="point-hit" r="28"></circle>
+              <circle class="vertex-dot" r="9"></circle>
+              <text class="point-label vertex-label">A</text>
+            </g>
+            <g class="drag-point vertex-handle" data-point="B" tabindex="0" role="button" aria-label="Vertex B. Use arrow keys to move.">
+              <circle class="point-hit" r="28"></circle>
+              <circle class="vertex-dot" r="9"></circle>
+              <text class="point-label vertex-label">B</text>
+            </g>
+            <g class="drag-point vertex-handle" data-point="C" tabindex="0" role="button" aria-label="Vertex C. Use arrow keys to move.">
+              <circle class="point-hit" r="28"></circle>
+              <circle class="vertex-dot" r="9"></circle>
+              <text class="point-label vertex-label">C</text>
+            </g>
+            <g id="trialPointHandle" class="drag-point trial-handle" data-point="P" tabindex="0" role="button" aria-label="Trial point P. Use arrow keys to move.">
+              <circle class="point-hit" r="29"></circle>
+              <circle class="trial-ring" r="13"></circle>
+              <circle class="trial-dot" r="6"></circle>
+              <text class="point-label trial-label">P</text>
+            </g>
+          </g>
+        </svg>
+        <p class="keyboard-note">Keyboard: focus A, B, C, or P and use the arrow keys. Hold Shift for larger steps.</p>
+      </section>
+
+      <aside class="controls" aria-label="Construction controls and measurements">
+        <section class="control-section proof-choice">
+          <h2>Choose a triangle to rotate</h2>
+          <div class="segmented-control" role="radiogroup" aria-label="Triangle to rotate">
+            <button type="button" class="rotation-choice is-selected" data-rotation="AB" role="radio" aria-checked="true">ABP about B</button>
+            <button type="button" class="rotation-choice" data-rotation="BC" role="radio" aria-checked="false">BCP about C</button>
+            <button type="button" class="rotation-choice" data-rotation="CA" role="radio" aria-checked="false">CAP about A</button>
+          </div>
+        </section>
+
+        <section class="step-card" aria-labelledby="stepTitle">
+          <p class="step-kicker" id="stepKicker">Explore</p>
+          <h2 id="stepTitle">Shape the triangle and choose any trial point P.</h2>
+          <p id="stepExplanation">The point P does not need to be your best guess. Its three distances will give us a path to straighten.</p>
+        </section>
+
+        <div class="button-grid">
+          <button type="button" class="primary-button" id="playButton"><span aria-hidden="true">▶</span> Play proof</button>
+          <button type="button" id="backButton">Back</button>
+          <button type="button" id="nextButton">Next</button>
+          <button type="button" class="reset-button" id="resetButton">Reset all</button>
+        </div>
+
+        <section class="measurements" aria-labelledby="measurementsTitle">
+          <div class="section-title-row">
+            <h2 id="measurementsTitle">Distance comparison</h2>
+            <span>SVG units</span>
+          </div>
+          <article class="measurement trial-measurement">
+            <span>Trial: PA + PB + PC</span>
+            <strong id="trialTotal">0.0</strong>
+          </article>
+          <article class="measurement minimum-measurement">
+            <span>Minimum at F</span>
+            <strong id="minimumTotal">—</strong>
+          </article>
+          <div class="gap-row">
+            <span>Trial is longer by</span>
+            <strong id="distanceGap">—</strong>
+          </div>
+          <p id="measurementNote" class="measurement-note">The minimum will be revealed at the final step.</p>
+        </section>
+
+        <section class="legend" aria-label="Diagram legend">
+          <div><span class="legend-line trial-sample"></span><span>Trial distances</span></div>
+          <div><span class="legend-line rotation-sample"></span><span>60° rotation</span></div>
+          <div><span class="legend-line construction-sample"></span><span>Straight construction line</span></div>
+          <div><span class="legend-dot fermat-sample"></span><span>True Fermat point F</span></div>
+        </section>
+      </aside>
+    </section>
+
+    <p id="liveStatus" class="sr-only" aria-live="polite"></p>
+  </main>
+
+  <script src="geometry.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
