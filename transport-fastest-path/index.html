@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>The Great Layer Race</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">A least-time adventure</p>
+        <h1>The Great Layer Race</h1>
+        <p class="subtitle">Swim, stroll, sprint, pedal, gallop, zoom, race, then fly from a cannon. Can your orange route beat the blue fastest route?</p>
+      </div>
+      <div class="law-card" aria-label="Fastest-route formulas">
+        <span>Fastest-route rule</span>
+        <strong>T = Σ distance / speed</strong>
+        <strong class="small-law">sin θ / v = constant</strong>
+        <small>θ is measured from the vertical guide</small>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="Interactive transport race lesson">
+      <section class="diagram-card" aria-label="Layer race diagram">
+        <div class="diagram-heading">
+          <div>
+            <h2>Eight increasingly ridiculous travel zones</h2>
+            <p>Drag A, B, and the orange route points. Faster zones make sideways travel cheaper in time.</p>
+          </div>
+          <div class="drag-hint">Drag horizontally</div>
+        </div>
+
+        <svg id="diagram" viewBox="0 0 1000 1040" role="img" aria-labelledby="diagramTitle diagramDesc">
+          <title id="diagramTitle">Fastest route through layered transport zones</title>
+          <desc id="diagramDesc">A and B are draggable endpoints. Orange handles define a trial route through equal-depth activity zones. A blue line shows the exact least-time route.</desc>
+          <defs>
+            <filter id="softShadow" x="-60%" y="-60%" width="220%" height="220%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#173044" flood-opacity="0.25"></feDropShadow>
+            </filter>
+            <clipPath id="zoneClip">
+              <rect x="52" y="66" width="896" height="896" rx="7"></rect>
+            </clipPath>
+
+            <symbol id="mode-swimming" viewBox="0 0 100 60">
+              <path class="water-stroke" d="M5 46 Q17 38 29 46 T53 46 T77 46 T101 46"></path>
+              <circle class="skin-fill icon-outline" cx="42" cy="20" r="9"></circle>
+              <path class="swim-cap icon-outline" d="M34 19 Q36 8 45 10 Q52 11 53 20 Z"></path>
+              <path class="sport-stroke" d="M34 31 Q47 28 61 38 M47 29 L27 39 M58 36 L74 27"></path>
+            </symbol>
+
+            <symbol id="mode-walking" viewBox="0 0 100 60">
+              <circle class="skin-fill icon-outline" cx="50" cy="10" r="7"></circle>
+              <path class="shirt-fill icon-outline" d="M43 19 L58 19 L61 38 L42 38 Z"></path>
+              <path class="limb-stroke" d="M44 23 L31 36 M58 23 L69 34 M47 38 L38 55 M56 38 L68 54"></path>
+              <path class="motion-stroke" d="M18 30 H31 M72 42 H84"></path>
+            </symbol>
+
+            <symbol id="mode-running" viewBox="0 0 100 60">
+              <circle class="skin-fill icon-outline" cx="57" cy="10" r="7"></circle>
+              <path class="runner-shirt icon-outline" d="M48 18 L62 20 L56 37 L41 32 Z"></path>
+              <path class="limb-stroke" d="M48 22 L34 15 M61 23 L75 17 M52 35 L69 47 L82 47 M47 33 L33 47 L20 52"></path>
+              <path class="motion-stroke" d="M8 17 H28 M5 27 H23 M10 37 H31"></path>
+            </symbol>
+
+            <symbol id="mode-cycling" viewBox="0 0 100 60">
+              <circle class="wheel-fill icon-outline" cx="24" cy="43" r="14"></circle>
+              <circle class="wheel-fill icon-outline" cx="77" cy="43" r="14"></circle>
+              <path class="bike-stroke" d="M24 43 L43 22 L56 43 Z M43 22 L64 22 L77 43 M38 43 H58 M40 17 H51 M62 18 L68 14"></path>
+              <circle class="skin-fill icon-outline" cx="50" cy="8" r="6"></circle>
+              <path class="rider-fill icon-outline" d="M45 14 L58 17 L51 29 L39 25 Z"></path>
+              <path class="limb-stroke" d="M56 19 L67 21 M48 27 L58 39 M44 25 L35 37"></path>
+            </symbol>
+
+            <symbol id="mode-horse" viewBox="0 0 100 60">
+              <ellipse class="horse-fill icon-outline" cx="52" cy="34" rx="27" ry="14"></ellipse>
+              <path class="horse-fill icon-outline" d="M72 30 Q79 12 91 17 L94 30 L82 36 Z"></path>
+              <path class="horse-mane" d="M77 14 L83 22 L88 15 L91 24"></path>
+              <path class="limb-stroke" d="M35 44 L30 58 M45 46 L44 59 M61 46 L66 59 M71 43 L78 56"></path>
+              <path class="horse-tail" d="M26 29 Q11 24 8 39"></path>
+              <circle class="skin-fill icon-outline" cx="52" cy="7" r="6"></circle>
+              <path class="rider-fill icon-outline" d="M46 13 L57 13 L61 29 L46 28 Z"></path>
+            </symbol>
+
+            <symbol id="mode-motorcycle" viewBox="0 0 100 60">
+              <circle class="tire-fill icon-outline" cx="23" cy="44" r="13"></circle>
+              <circle class="tire-fill icon-outline" cx="78" cy="44" r="13"></circle>
+              <path class="motor-fill icon-outline" d="M23 43 L38 28 L60 28 L77 43 L54 45 L41 39 Z"></path>
+              <path class="motor-stroke" d="M58 28 L70 18 L78 43 M38 29 L29 22"></path>
+              <circle class="helmet-fill icon-outline" cx="54" cy="13" r="9"></circle>
+              <path class="rider-fill icon-outline" d="M47 19 Q57 19 65 29 L48 34 L38 27 Z"></path>
+              <path class="motion-stroke" d="M3 25 H24 M7 34 H29"></path>
+            </symbol>
+
+            <symbol id="mode-formula" viewBox="0 0 100 60">
+              <circle class="tire-fill icon-outline" cx="24" cy="45" r="11"></circle>
+              <circle class="tire-fill icon-outline" cx="76" cy="45" r="11"></circle>
+              <path class="formula-fill icon-outline" d="M9 42 L18 29 L44 27 L57 18 L73 20 L80 33 L95 38 L91 47 L14 47 Z"></path>
+              <path class="formula-wing icon-outline" d="M8 25 H31 L27 33 H8 Z M77 17 H94 V23 H78 Z"></path>
+              <circle class="helmet-fill icon-outline" cx="60" cy="22" r="7"></circle>
+              <text class="car-number" x="47" y="43">1</text>
+              <path class="motion-stroke" d="M0 34 H15 M1 51 H15"></path>
+            </symbol>
+
+            <symbol id="mode-cannonball" viewBox="0 0 100 60">
+              <path class="smoke-fill" d="M10 42 Q0 33 12 27 Q7 13 23 17 Q30 5 39 18 Q53 13 54 28 Q64 36 51 44 Z"></path>
+              <path class="motion-stroke" d="M20 22 L48 29 M15 34 L48 35 M23 47 L50 40"></path>
+              <circle class="cannonball-fill icon-outline" cx="68" cy="34" r="19"></circle>
+              <path class="helmet-fill icon-outline" d="M55 34 Q56 15 70 14 Q84 16 85 33 Z"></path>
+              <circle class="skin-fill" cx="71" cy="32" r="8"></circle>
+              <circle class="eye-fill" cx="74" cy="30" r="1.8"></circle>
+              <path class="smile-stroke" d="M69 36 Q74 40 78 35"></path>
+              <path class="cannonball-fill icon-outline" d="M61 44 L53 56 M76 47 L83 57"></path>
+            </symbol>
+          </defs>
+
+          <rect class="plot-frame" x="52" y="66" width="896" height="896" rx="7"></rect>
+          <g id="layerGroup" clip-path="url(#zoneClip)"></g>
+          <g id="decorationGroup" clip-path="url(#zoneClip)" aria-hidden="true"></g>
+          <g id="interfaceGroup"></g>
+          <g id="angleGuideGroup" aria-hidden="true"></g>
+
+          <g class="path-layer" clip-path="url(#zoneClip)">
+            <path id="optimalPath" class="optimal-path"></path>
+            <path id="trialPath" class="trial-path"></path>
+          </g>
+          <g id="optimalPointGroup" aria-hidden="true"></g>
+          <g id="trialHandleGroup"></g>
+          <g id="endpointGroup"></g>
+
+          <g id="racerLayer" class="racer-layer is-hidden" aria-hidden="true">
+            <g id="trialRacer" class="racer trial-racer">
+              <circle class="racer-badge" r="24"></circle>
+              <use id="trialRacerIcon" class="racer-icon" href="#mode-swimming" x="-21" y="-13" width="42" height="26"></use>
+            </g>
+            <g id="optimalRacer" class="racer optimal-racer">
+              <circle class="racer-badge" r="19"></circle>
+              <use id="optimalRacerIcon" class="racer-icon" href="#mode-swimming" x="-18" y="-11" width="36" height="22"></use>
+            </g>
+          </g>
+        </svg>
+        <p class="keyboard-note">Keyboard: focus a handle, then use ←/→. Hold Shift for larger steps.</p>
+      </section>
+
+      <aside class="controls" aria-label="Layer race controls and results">
+        <section class="control-section">
+          <div class="section-title-row">
+            <label for="layerSlider">Number of zones</label>
+            <output id="layerValue" for="layerSlider">8</output>
+          </div>
+          <input id="layerSlider" type="range" min="2" max="8" step="1" value="8">
+          <div class="range-labels" aria-hidden="true"><span>2</span><span>8</span></div>
+          <p class="control-note">Total depth stays 16 m, so each zone is <strong id="layerDepth">2.00 m</strong> deep.</p>
+        </section>
+
+        <div class="button-row">
+          <button id="raceButton" class="primary-button" type="button">▶ Start the chaos</button>
+          <button id="resetButton" type="button">Reset route</button>
+        </div>
+
+        <section class="results" aria-labelledby="resultsTitle">
+          <div class="section-title-row">
+            <h2 id="resultsTitle">Travel-time showdown</h2>
+            <span class="time-units">seconds</span>
+          </div>
+          <div class="result-grid">
+            <article class="result-card trial-result">
+              <span>Your route</span>
+              <strong id="trialTime">0.000 s</strong>
+            </article>
+            <article class="result-card optimal-result">
+              <span>Fastest route</span>
+              <strong id="optimalTime">0.000 s</strong>
+            </article>
+          </div>
+          <div class="difference-row"><span>Extra time</span><strong id="differenceTime">0.000 s</strong></div>
+          <div class="difference-row"><span>Your route is slower by</span><strong id="percentageSlower">0.0%</strong></div>
+          <p id="comparisonMessage" class="comparison-message" aria-live="polite"></p>
+          <p id="raceStatus" class="race-status" aria-live="polite">Press Start the chaos to race both travelers through every active zone.</p>
+        </section>
+
+        <section class="legend" aria-label="Diagram legend">
+          <div><span class="legend-line optimal-sample"></span><span>Fastest route</span></div>
+          <div><span class="legend-line trial-sample"></span><span>Your route</span></div>
+          <div><span class="legend-guide"></span><span>Angle measured from vertical</span></div>
+        </section>
+
+        <section class="speed-list" aria-labelledby="speedListTitle">
+          <h2 id="speedListTitle">The speed ladder</h2>
+          <ol id="speedList"></ol>
+        </section>
+
+        <section class="explanation">
+          <h2>Why dive into the fast zones?</h2>
+          <p>Time equals <strong>distance ÷ speed</strong>. The blue route stays straighter in slow zones and saves its sideways travel for the speedy zones below.</p>
+          <p>The fastest route obeys <strong>sin θ / v = constant</strong>. Bigger speed means a bigger angle from vertical—and a much sillier vehicle.</p>
+        </section>
+      </aside>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
