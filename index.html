@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Refraction: The Fastest Path</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Fermat's principle</p>
+        <h1>Refraction: The Fastest Path</h1>
+        <p class="subtitle">A ray bends as its speed changes. Shape your own route from A to B, then compare it with the path that takes the least time.</p>
+      </div>
+      <div class="law-card" aria-label="Snell's law">
+        <span>Snell's law</span>
+        <strong>n sin θ = constant</strong>
+        <small>θ is measured from the normal</small>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="Interactive refraction lesson">
+      <section class="diagram-card" aria-label="Refraction diagram">
+        <div class="diagram-heading">
+          <div>
+            <h2>Layered media</h2>
+            <p>Drag A, B, and the orange points. Lower layers have smaller refractive index and greater ray speed.</p>
+          </div>
+          <div class="drag-hint">Drag horizontally</div>
+        </div>
+
+        <svg id="diagram" viewBox="0 0 1120 660" role="img" aria-labelledby="diagramTitle diagramDesc">
+          <title id="diagramTitle">Fastest path through layered refractive media</title>
+          <desc id="diagramDesc">A and B are draggable endpoints. Orange handles define a trial path through equal-depth horizontal layers. A blue line shows the exact least-time path.</desc>
+          <defs>
+            <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#102f45" flood-opacity="0.24"></feDropShadow>
+            </filter>
+            <clipPath id="mediumClip">
+              <rect x="48" y="58" width="1024" height="512" rx="4"></rect>
+            </clipPath>
+          </defs>
+
+          <rect class="plot-frame" x="48" y="58" width="1024" height="512" rx="4"></rect>
+          <g id="layerGroup" clip-path="url(#mediumClip)"></g>
+          <g id="interfaceGroup"></g>
+          <g id="normalGroup" aria-hidden="true"></g>
+
+          <g class="path-layer" clip-path="url(#mediumClip)">
+            <path id="optimalPath" class="optimal-path"></path>
+            <path id="trialPath" class="trial-path"></path>
+          </g>
+
+          <g id="optimalPointGroup" aria-hidden="true"></g>
+          <g id="trialHandleGroup"></g>
+          <g id="endpointGroup"></g>
+
+          <g id="pulseLayer" class="pulse-layer is-hidden" aria-hidden="true">
+            <circle id="trialPulse" class="trial-pulse" r="10"></circle>
+            <circle id="optimalPulseHalo" class="optimal-pulse-halo" r="10"></circle>
+            <circle id="optimalPulse" class="optimal-pulse" r="6"></circle>
+          </g>
+        </svg>
+
+        <p class="keyboard-note">Keyboard: focus a handle, then use ←/→. Hold Shift for larger steps.</p>
+      </section>
+
+      <aside class="controls" aria-label="Diagram controls and results">
+        <section class="control-section">
+          <div class="section-title-row">
+            <label for="layerSlider">Number of layers</label>
+            <output id="layerValue" for="layerSlider">4</output>
+          </div>
+          <input id="layerSlider" type="range" min="2" max="8" step="1" value="4">
+          <div class="range-labels" aria-hidden="true"><span>2</span><span>8</span></div>
+          <p class="control-note">Total depth stays 8 units, so each layer is <strong id="layerDepth">2.00 units</strong> deep.</p>
+        </section>
+
+        <div class="button-row">
+          <button id="raceButton" class="primary-button" type="button">
+            <span aria-hidden="true">▶</span> Race the paths
+          </button>
+          <button id="resetButton" type="button">Reset trial</button>
+        </div>
+
+        <section class="results" aria-labelledby="resultsTitle">
+          <div class="section-title-row">
+            <h2 id="resultsTitle">Travel-time comparison</h2>
+            <span class="relative-units">relative units</span>
+          </div>
+          <div class="result-grid">
+            <article class="result-card trial-result">
+              <span>Your trial</span>
+              <strong id="trialTime">0.000</strong>
+            </article>
+            <article class="result-card optimal-result">
+              <span>Fastest</span>
+              <strong id="optimalTime">0.000</strong>
+            </article>
+          </div>
+          <div class="difference-row">
+            <span>Extra time</span>
+            <strong id="differenceTime">0.000</strong>
+          </div>
+          <div class="difference-row">
+            <span>Your path is slower by</span>
+            <strong id="percentageSlower">0.0%</strong>
+          </div>
+          <p id="comparisonMessage" class="comparison-message" aria-live="polite"></p>
+          <p id="raceStatus" class="race-status" aria-live="polite">Press Race to watch both pulses move at the local speed of each layer.</p>
+        </section>
+
+        <section class="legend" aria-label="Diagram legend">
+          <div><span class="legend-line optimal-sample"></span><span>Fastest path</span></div>
+          <div><span class="legend-line trial-sample"></span><span>Your trial path</span></div>
+          <div><span class="legend-normal"></span><span>Normal to the boundary</span></div>
+        </section>
+
+        <section class="explanation">
+          <h2>Why does the ray bend?</h2>
+          <p>Travel time in one layer is <strong>n × distance</strong>. A smaller refractive index means greater speed, so the fastest path spends more horizontal distance in the lower, faster layers.</p>
+          <p>As <strong>n</strong> decreases, <strong>θ</strong> increases: the blue path bends away from each vertical normal.</p>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
