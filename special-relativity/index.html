@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Minkowski Spacetime Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Special relativity · c = 1</p>
+        <h1>Minkowski Spacetime Explorer</h1>
+        <p class="subtitle">Set a rocket's velocity, place two events, and compare position, time, and simultaneity for two moving observers.</p>
+      </div>
+      <section class="motion-summary" aria-label="Current rocket motion">
+        <div>
+          <span>Rocket velocity</span>
+          <strong id="headerBeta">+0.60c</strong>
+        </div>
+        <div>
+          <span>Lorentz factor</span>
+          <strong id="headerGamma">γ = 1.250</strong>
+        </div>
+      </section>
+    </header>
+
+    <section class="workspace" aria-label="Interactive Minkowski spacetime lesson">
+      <section class="diagram-card" aria-label="Spacetime diagram">
+        <div class="diagram-heading">
+          <div>
+            <h2>Two events, two coordinate systems</h2>
+            <p>Drag A or B. A click on empty graph space moves the active event; gold lines show paths taken by light.</p>
+          </div>
+          <div class="view-badges">
+            <span class="view-badge" id="viewBadge">Earth grid · Earth upright</span>
+            <span class="range-badge" id="viewRangeBadge">16 × 16 units</span>
+          </div>
+        </div>
+
+        <svg id="diagram" viewBox="0 0 900 900" role="img" aria-labelledby="diagramTitle diagramDesc" tabindex="0">
+          <title id="diagramTitle">Interactive Minkowski spacetime graph</title>
+          <desc id="diagramDesc">Earth and rocket position and time axes, a selected coordinate grid, the light cone, and two movable events labeled A and B.</desc>
+          <defs>
+            <clipPath id="plotClip">
+              <rect x="50" y="50" width="800" height="800" rx="8"></rect>
+            </clipPath>
+            <filter id="eventShadow" x="-100%" y="-100%" width="300%" height="300%">
+              <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#31215f" flood-opacity="0.28"></feDropShadow>
+            </filter>
+            <marker id="earthArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="earth-arrow"></path>
+            </marker>
+            <marker id="rocketArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="rocket-arrow"></path>
+            </marker>
+            <marker id="sharedArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="shared-arrow"></path>
+            </marker>
+            <marker id="lightArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="light-arrow"></path>
+            </marker>
+          </defs>
+
+          <rect class="plot-background" x="50" y="50" width="800" height="800" rx="8"></rect>
+          <g id="plotContents" clip-path="url(#plotClip)">
+            <g id="gridLayer" aria-hidden="true"></g>
+            <g id="lightLayer" aria-hidden="true"></g>
+            <g id="simultaneityLayer" aria-hidden="true"></g>
+            <g id="guideLayer" aria-hidden="true"></g>
+            <g id="axisLayer" aria-hidden="true"></g>
+            <g id="tickLayer" aria-hidden="true"></g>
+            <g id="eventLayer">
+              <g id="eventAHandle" class="event-handle event-a is-active" data-event="A" tabindex="0" role="button" aria-label="Event A. Use arrow keys to move it.">
+                <circle class="event-halo" r="17"></circle>
+                <circle class="event-dot" r="8"></circle>
+                <circle class="event-core" r="2.5"></circle>
+                <text class="event-point-label" x="0" y="-25" text-anchor="middle">A</text>
+              </g>
+              <g id="eventBHandle" class="event-handle event-b" data-event="B" tabindex="0" role="button" aria-label="Event B. Use arrow keys to move it.">
+                <circle class="event-halo" r="17"></circle>
+                <circle class="event-dot" r="8"></circle>
+                <circle class="event-core" r="2.5"></circle>
+                <text class="event-point-label" x="0" y="-25" text-anchor="middle">B</text>
+              </g>
+            </g>
+          </g>
+          <rect class="plot-border" x="50" y="50" width="800" height="800" rx="8"></rect>
+        </svg>
+
+        <div class="diagram-footer">
+          <div class="diagram-footer-hints">
+            <span><kbd>Click</kbd> moves the active event</span>
+            <span><kbd>Drag A or B</kbd> to move it directly</span>
+            <span><kbd>Scroll</kbd> zooms around the pointer</span>
+            <span><kbd>Arrow keys</kbd> move the focused event</span>
+          </div>
+          <div class="zoom-controls" role="group" aria-label="Graph zoom controls">
+            <button id="zoomOutButton" type="button" aria-label="Zoom out">−</button>
+            <button id="fitViewButton" type="button">Fit events</button>
+            <button id="zoomInButton" type="button" aria-label="Zoom in">+</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="controls" aria-label="Spacetime controls and measurements">
+        <section class="control-section velocity-section">
+          <div class="section-title-row">
+            <label for="speedSlider">Rocket velocity <span class="math-label">β = v/c</span></label>
+            <output id="speedOutput" for="speedSlider speedInput">+0.60c</output>
+          </div>
+          <input id="speedSlider" type="range" min="-0.95" max="0.95" step="0.01" value="0.60">
+          <div class="velocity-row">
+            <span>−0.95c</span>
+            <label class="number-field compact-field">
+              <span>Exact β</span>
+              <input id="speedInput" type="number" min="-0.95" max="0.95" step="0.01" value="0.60" inputmode="decimal">
+            </label>
+            <span>+0.95c</span>
+          </div>
+          <div class="gamma-row">
+            <span>Time dilation and length contraction factor</span>
+            <strong id="gammaOutput">γ = 1.250</strong>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title-row">
+            <h2>Coordinate grid &amp; readout</h2>
+          </div>
+          <div class="segmented-control" role="radiogroup" aria-label="Coordinate grid and event readout frame">
+            <button type="button" class="frame-button is-selected" data-frame="earth" role="radio" aria-checked="true">Earth</button>
+            <button type="button" class="frame-button" data-frame="rocket" role="radio" aria-checked="false">Rocket</button>
+          </div>
+          <p class="control-note">Chooses which observer's grid and event coordinates are displayed.</p>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title-row">
+            <h2>Upright perspective</h2>
+          </div>
+          <div class="segmented-control" role="radiogroup" aria-label="Frame whose axes are upright">
+            <button type="button" class="perspective-button is-selected" data-perspective="earth" role="radio" aria-checked="true">Earth axes</button>
+            <button type="button" class="perspective-button" data-perspective="rocket" role="radio" aria-checked="false">Rocket axes</button>
+          </div>
+          <p class="control-note">Changes the viewpoint without changing the physical event.</p>
+        </section>
+
+        <section class="event-card" aria-labelledby="eventTitle">
+          <div class="event-card-heading">
+            <div>
+              <p class="event-kicker" id="eventFrameLabel">Editing A · Earth frame</p>
+              <h2 id="eventTitle">Event coordinates</h2>
+            </div>
+            <span class="event-chip event-a-chip" id="activeEventChip">A</span>
+          </div>
+          <div class="segmented-control event-selector" role="radiogroup" aria-label="Event to edit">
+            <button type="button" class="event-select-button is-selected" data-event-select="A" role="radio" aria-checked="true"><span class="event-selector-dot event-a-dot"></span>Event A</button>
+            <button type="button" class="event-select-button" data-event-select="B" role="radio" aria-checked="false"><span class="event-selector-dot event-b-dot"></span>Event B</button>
+          </div>
+          <div class="coordinate-inputs">
+            <label class="number-field">
+              <span id="eventXLabel">Position x</span>
+              <span class="input-with-unit">
+                <input id="eventXInput" type="number" step="0.1" value="3.00" inputmode="decimal">
+                <small>light-sec</small>
+              </span>
+            </label>
+            <label class="number-field">
+              <span id="eventTLabel">Time t</span>
+              <span class="input-with-unit">
+                <input id="eventTInput" type="number" step="0.1" value="5.00" inputmode="decimal">
+                <small>seconds</small>
+              </span>
+            </label>
+          </div>
+          <div class="interval-row">
+            <span>Invariant interval <span class="math-label">s² = (ct)² − x²</span></span>
+            <strong id="intervalOutput">+16.00</strong>
+          </div>
+        </section>
+
+        <section class="simultaneity-card is-simultaneous" id="simultaneityCard" aria-labelledby="simultaneityTitle">
+          <div class="simultaneity-icon" id="simultaneityIcon" aria-hidden="true">✓</div>
+          <div>
+            <p class="simultaneity-kicker" id="simultaneityFrame">Earth frame comparison</p>
+            <h2 id="simultaneityTitle">A and B are simultaneous</h2>
+            <p id="simultaneityDetail">Their time difference is within 0.01 seconds.</p>
+          </div>
+          <strong id="timeDifferenceOutput">Δt = 0.00 s</strong>
+        </section>
+
+        <button id="resetButton" class="reset-button" type="button">Reset explorer</button>
+
+        <section class="legend" aria-label="Diagram legend">
+          <h2>Diagram key</h2>
+          <div class="legend-grid">
+            <div><span class="legend-line earth-sample"></span><span>Earth axes</span></div>
+            <div><span class="legend-line rocket-sample"></span><span>Rocket axes</span></div>
+            <div><span class="legend-line light-sample"></span><span>Light paths</span></div>
+            <div><span class="legend-dot event-a-sample"></span><span>Event A</span></div>
+            <div><span class="legend-dot event-b-sample"></span><span>Event B</span></div>
+          </div>
+        </section>
+
+        <section class="formula-card" aria-label="Lorentz transformation equations">
+          <p>Lorentz transformation</p>
+          <div><span>x′ = γ(x − βct)</span><span>ct′ = γ(ct − βx)</span></div>
+          <small>Distance is measured in light-seconds, so one second of time has the same graph scale as one light-second.</small>
+        </section>
+      </aside>
+    </section>
+
+    <p id="liveStatus" class="sr-only" aria-live="polite"></p>
+  </main>
+
+  <script src="geometry.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
