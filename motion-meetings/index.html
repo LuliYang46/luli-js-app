@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f5f0">
+  <title>Two People, One Path · Lulipedia</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header class="page-header">
+      <div class="brand"><span class="brand-symbol" aria-hidden="true">L.</span> LULIPEDIA <span class="brand-divider">/</span> MOTION LAB</div>
+      <span class="header-note">An interactive mathematics lesson</span>
+    </header>
+
+    <section class="intro">
+      <div><p class="eyebrow">A LITTLE MOVEMENT. A LOT TO DISCOVER.</p><h1>Two people, one path.</h1>
+      <p class="intro-copy">Follow every meeting. Then trace the journeys behind one of them.</p></div>
+      <div class="legend" aria-label="Person colours and line styles"><span><i class="line-key person-one"></i>Person 1</span><span><i class="line-key person-two"></i>Person 2</span></div>
+    </section>
+
+    <div class="workspace">
+      <aside class="panel settings-panel" aria-label="Motion settings">
+        <div class="panel-heading"><h2>Set the motion</h2><span class="small-tag">YOUR EXPERIMENT</span></div>
+        <form id="settingsForm" novalidate>
+          <fieldset><legend>Speed ratio</legend>
+            <div class="ratio-inputs">
+              <label class="ratio-box one"><span>PERSON 1</span><input id="speed1" type="number" min="1" max="12" step="1" value="5" aria-describedby="ratioHint settingsError" aria-label="Person 1 speed ratio"></label>
+              <span class="ratio-colon">:</span>
+              <label class="ratio-box two"><span>PERSON 2</span><input id="speed2" type="number" min="1" max="12" step="1" value="3" aria-describedby="ratioHint settingsError" aria-label="Person 2 speed ratio"></label>
+            </div>
+            <p id="ratioHint" class="helper">Whole numbers, 1–12. Faster means steeper.</p>
+            <p id="ratioSummary" class="ratio-summary">Reduced ratio 5 : 3</p>
+          </fieldset>
+          <fieldset class="start-fields"><legend>Starting endpoints</legend>
+            <label class="field-row" for="start1"><span><i class="person-dot one"></i>Person 1</span><select id="start1"><option value="A">Start at A</option><option value="B">Start at B</option></select></label>
+            <label class="field-row" for="start2"><span><i class="person-dot two"></i>Person 2</span><select id="start2"><option value="A">Start at A</option><option value="B" selected>Start at B</option></select></label>
+          </fieldset>
+          <p id="settingsError" class="error-message" role="alert" hidden></p>
+        </form>
+        <div class="settings-divider"></div>
+        <label class="field-row" for="meetingNumber"><span>Explore meeting</span><span class="number-with-hash"><span aria-hidden="true">#</span><input id="meetingNumber" type="number" min="1" max="10" step="1" value="3" aria-describedby="meetingHint meetingError"></span></label>
+        <p id="meetingHint" class="helper">Choose any of the 10 meetings.</p>
+        <p id="meetingError" class="error-message" role="alert" hidden></p>
+        <label class="field-row playback-rate" for="playbackRate"><span>Playback speed</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
+        <div class="playback-buttons"><button id="playButton" class="primary-button" type="button"><span id="playIcon" aria-hidden="true">▶</span><span id="playLabel">Play lesson</span></button><button id="restartButton" class="icon-button" type="button" aria-label="Restart the whole lesson" title="Restart the whole lesson">↺</button></div>
+        <button id="replayButton" class="text-button" type="button">Replay selected meeting <span aria-hidden="true">↗</span></button>
+        <div class="period-note"><span class="note-symbol" aria-hidden="true">↔</span><p>Constant speeds. Instant turns.<br>Each complete A–B leg is <strong>S</strong>.</p></div>
+      </aside>
+
+      <section class="panel overview-panel" aria-labelledby="overviewTitle">
+        <div class="stage-tabs" aria-label="Animation stage"><button id="overviewTab" class="stage-tab active" type="button" aria-pressed="true"><span>01</span> Full period</button><button id="detailTab" class="stage-tab" type="button" aria-pressed="false"><span>02</span> Selected meeting</button><span id="stageBadge" class="stage-badge">READY TO EXPLORE</span></div>
+        <div class="overview-heading"><div><h2 id="overviewTitle">The whole journey</h2><p id="periodSummary">Both return home after 5 and 3 round trips.</p></div><span class="distance-tag">AB = S</span></div>
+        <svg id="trackSvg" class="track-svg" viewBox="0 0 1060 178" role="img" aria-labelledby="trackTitle trackDesc">
+          <title id="trackTitle">Two people travelling between A and B</title><desc id="trackDesc">The people share one line. Their icons are offset above and below it so both remain visible when they meet.</desc>
+          <defs><pattern id="trackPattern" width="18" height="8" patternUnits="userSpaceOnUse"><path d="M 0 8 L 8 0" stroke="#dddcd4" stroke-width="1"/></pattern></defs>
+          <rect x="65" y="89" width="930" height="8" fill="url(#trackPattern)"/>
+          <line x1="65" y1="89" x2="995" y2="89" class="track-line"/>
+          <g id="trackMeetingTicks"></g>
+          <circle cx="65" cy="89" r="5" class="endpoint-dot"/><circle cx="995" cy="89" r="5" class="endpoint-dot"/>
+          <text x="40" y="95" class="endpoint-label">A</text><text x="1010" y="95" class="endpoint-label">B</text>
+          <g id="meetingHalo" class="meeting-halo" visibility="hidden"><circle cy="89" r="16"/><circle cy="89" r="6"/></g>
+          <g id="traveller1" class="traveller one"><line class="position-guide" y1="58" y2="89"/><g class="person-glyph" transform="translate(0 40)"><circle cy="-12" r="6"/><path d="M0 -5 V12 M-10 2 L0 -3 L10 2 M0 12 L-8 23 M0 12 L8 23"/></g><text y="17" class="traveller-label">1</text></g>
+          <g id="traveller2" class="traveller two"><line class="position-guide" y1="89" y2="114"/><g class="person-glyph" transform="translate(0 129)"><circle cy="-12" r="6"/><path d="M0 -5 V12 M-10 2 L0 -3 L10 2 M0 12 L-8 23 M0 12 L8 23"/></g><text y="173" class="traveller-label">2</text></g>
+        </svg>
+        <div class="track-readout"><span class="one">Person 1 <strong id="position1">at A</strong></span><span id="trackStatus">10 meetings in one period</span><span class="two">Person 2 <strong id="position2">at B</strong></span></div>
+        <div class="graph-label"><span>POSITION</span><span id="graphNote">A at the top · B at the bottom</span></div>
+        <div class="graph-scroll" tabindex="0" role="region" aria-label="Position versus time graph; scroll horizontally on small screens"><svg id="timeGraph" viewBox="0 0 1060 310" role="group" aria-labelledby="graphTitle graphDesc"><title id="graphTitle">Position versus time over one shared period</title><desc id="graphDesc">Each turn makes a corner. Numbered intersections are meetings. Select a numbered marker to explore it.</desc></svg></div>
+        <div class="progress-control"><div class="progress-caption"><label id="progressLabel" for="progressSlider">Full-period progress</label><span id="timeReadout">0 / T</span></div><input id="progressSlider" type="range" min="0" max="1" step="0.0001" value="0" aria-label="Full-period progress"></div>
+        <p id="playbackStatus" class="playback-status" role="status">Press Play lesson to watch one complete period, followed by the selected meeting.</p>
+      </section>
+
+      <aside class="panel meetings-panel" aria-labelledby="meetingsTitle"><div class="panel-heading"><h2 id="meetingsTitle">Meeting notebook</h2><span id="meetingCount" class="count-badge">10</span></div><p class="helper notebook-hint">Position measured from A. Time as a share of period T.</p><div id="meetingList" class="meeting-list"></div><p class="counting-note">Endpoint encounters count once.<br>The starting instant does not count.</p></aside>
+
+      <section class="panel detail-panel" aria-labelledby="detailTitle">
+        <div class="detail-heading"><div><p class="eyebrow">02 / FOLLOW THE DISTANCE</p><h2 id="detailTitle">Inside meeting #3</h2><p id="detailSubtitle">Two journeys, one meeting point.</p></div><span id="meetingPosition" class="meeting-position">0.5S from A</span></div>
+        <div id="continuousNotice" class="continuous-notice" hidden><span aria-hidden="true">↔</span><h3>They move together continuously.</h3><p>With equal speeds and the same start, their paths overlap throughout the journey. There are no separate meetings to number.</p></div>
+        <div id="discreteDetail"><div class="route-explainer"><span class="mini-key" aria-hidden="true">↪</span>Every new row continues from the turn above it. Each full row adds S.</div>
+          <div id="routeScroll" class="route-scroll" tabindex="0" role="region" aria-label="Folded routes to the selected meeting; scroll to see longer journeys"><svg id="routeSvg" viewBox="0 0 1060 330" role="img" aria-labelledby="routeTitle routeDesc"><title id="routeTitle">Folded travelled routes</title><desc id="routeDesc">Each person's path folds onto a new row at every endpoint turn. A vertical guide marks the final meeting position.</desc></svg></div>
+          <div class="detail-transport"><button id="detailPlayButton" class="detail-play" type="button">▶ Play replay</button><label class="sr-only" for="detailProgressSlider">Selected meeting replay progress</label><input id="detailProgressSlider" type="range" min="0" max="1" step="0.0001" value="0"><span id="detailProgressText">0%</span></div>
+          <div class="distance-readouts"><div class="distance-card one"><span><i class="person-dot one"></i>Person 1 travelled</span><strong id="distance1">d₁ = 0S</strong></div><div class="distance-card two"><span><i class="person-dot two"></i>Person 2 travelled</span><strong id="distance2">d₂ = 0S</strong></div></div>
+          <div id="equationBox" class="equation-box"><div><span class="equation-icon" aria-hidden="true">=</span><p id="equationPrompt">Replay the selected meeting to reveal its distance equation.</p></div><div id="equationResult" hidden><p id="equationContext" class="equation-context"></p><div id="equations" class="equations"></div><p id="equationExplanation" class="equation-explanation"></p></div></div>
+        </div>
+      </section>
+    </div>
+    <footer><span>LULIPEDIA · LEARN BY SEEING</span><span>powered by Luli and AI</span></footer>
+  </main>
+  <script src="motion.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
